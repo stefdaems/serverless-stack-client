@@ -3,6 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Auth } from "aws-amplify";
+
+import { onError } from "./libs/errorLib";
 import { AppContext } from "./libs/contextLib";
 import Routes from "./Routes";
 import "./App.css";
@@ -22,7 +24,7 @@ function App() {
       userHasAuthenticated(true);
     } catch (e) {
       if (e !== "No current user") {
-        alert(e);
+        onError(e);
       }
     }
 
@@ -48,7 +50,12 @@ function App() {
           <Navbar.Collapse>
             <Nav pullRight>
               {isAuthenticated ? (
-                <NavItem onClick={handleLogout}>Logout</NavItem>
+                <>
+                  <LinkContainer to="/settings">
+                    <NavItem>Settings</NavItem>
+                  </LinkContainer>
+                  <NavItem onClick={handleLogout}>Logout</NavItem>
+                </>
               ) : (
                 <>
                   <LinkContainer to="/signup">
